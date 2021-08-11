@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Toggleable from './Toggleable'
 
-const CreateNoteForm = ({
-  addNote,
-  handleLogout
-}) => {
+const CreateNoteForm = ({ addNote, handleLogout }) => {
   const [newNote, setNewNote] = useState('')
+
+  const toggleableRef = useRef()
 
   const handleChange = (ev) => {
     setNewNote(ev.target.value)
@@ -20,10 +19,11 @@ const CreateNoteForm = ({
 
     addNote(noteObject)
     setNewNote('')
+    toggleableRef.current.toggleVisibility()
   }
 
   return (
-    <Toggleable buttonLabel='New note'>
+    <Toggleable ref={toggleableRef} buttonLabel='New note'>
       <h1>Create a new note</h1>
       <form onSubmit={handleSubmit}>
         <input
