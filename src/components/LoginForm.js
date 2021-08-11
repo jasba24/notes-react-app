@@ -1,4 +1,5 @@
 import Toggleable from './Toggleable'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({
   username,
@@ -31,5 +32,13 @@ const LoginForm = ({
     </form>
   </Toggleable>
 )
+
+LoginForm.propTypes = {
+  username: PropTypes.string,
+  password: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired
+}
 
 export default LoginForm
