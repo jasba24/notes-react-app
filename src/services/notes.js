@@ -26,3 +26,14 @@ export const createNote = (newObject) => {
       return data
     })
 }
+
+export const update = (id, newObject) => {
+  const config = {
+    headers: {
+      Authorization: token
+    }
+  }
+
+  const request = axios.put(`${baseURL}/${id}`, newObject, config)
+  return request.then(response => response.data)
+}

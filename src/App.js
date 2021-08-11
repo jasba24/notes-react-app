@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Note from './components/Note'
-import { createNote, getAllNotes, setToken } from './services/notes'
+import { createNote, getAllNotes, setToken, update } from './services/notes'
 import { login } from './services/login'
 import LoginForm from './components/LoginForm'
 import CreateNoteForm from './components/CreateNoteForm'
@@ -62,6 +62,16 @@ export default function App () {
     window.localStorage.removeItem('loggedNoteAppUser')
   }
 
+  const toggleImportanceOf = (id) => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -83,7 +93,11 @@ export default function App () {
       {notes.length === 0 && 'Loading...'}
       <ol>
         {notes.map((note) => (
-          <Note key={note.id} {...note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         ))}
       </ol>
 
