@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import Note from './Note'
+import Note from './components/Note'
 import { createNote, getAllNotes, setToken } from './services/notes'
 import { login } from './services/login'
+import LoginForm from './components/LoginForm'
+import CreateNoteForm from './components/CreateNoteForm'
 
 export default function App () {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -24,21 +25,10 @@ export default function App () {
     }
   }, [])
 
-  const handleChange = (ev) => {
-    setNewNote(ev.target.value)
-  }
-
-  const handleSubmit = (ev) => {
-    ev.preventDefault()
-
-    const noteToAddToState = {
-      content: newNote
-    }
-
-    createNote(noteToAddToState).then((newNote) =>
+  const addNote = (noteObject) => {
+    createNote(noteObject).then((newNote) =>
       setNotes([...notes, newNote])
     )
-    setNewNote('')
   }
 
   const handleLogin = async (ev) => {
@@ -72,56 +62,22 @@ export default function App () {
     window.localStorage.removeItem('loggedNoteAppUser')
   }
 
-  const LoginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          placeholder='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          placeholder='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type='submit'>Login</button>
-    </form>
-  )
-
-  const CreateNoteForm = () => (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          placeholder='Write your note content'
-          onChange={handleChange}
-          value={newNote}
-        />
-        <button>Create note</button>
-      </form>
-      <div>
-        <button onClick={handleLogout}>
-          LogOut
-        </button>
-      </div>
-    </>
-  )
-
   return (
     <div>
       <h1>Notes</h1>
       {
         user
-          ? CreateNoteForm()
-          : LoginForm()
+          ? <CreateNoteForm
+              addNote={addNote}
+              handleLogout={handleLogout}
+            />
+          : <LoginForm
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleSubmit={handleLogin}
+            />
       }
 
       {notes.length === 0 && 'Loading...'}
