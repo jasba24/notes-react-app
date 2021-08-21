@@ -9,7 +9,7 @@ const LoginForm = ({
   handleSubmit
 }) => (
   <Toggleable buttonLabel='Show Login'>
-    <form onSubmit={handleSubmit}>
+    <form data-test-id='login-form' onSubmit={handleSubmit}>
       <div>
         <input
           type='text'

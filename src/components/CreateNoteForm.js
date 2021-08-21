@@ -14,7 +14,8 @@ const CreateNoteForm = ({ addNote, handleLogout }) => {
     ev.preventDefault()
 
     const noteObject = {
-      content: newNote
+      content: newNote,
+      important: false
     }
 
     addNote(noteObject)
@@ -25,7 +26,7 @@ const CreateNoteForm = ({ addNote, handleLogout }) => {
   return (
     <Toggleable ref={toggleableRef} buttonLabel='New note'>
       <h1>Create a new note</h1>
-      <form onSubmit={handleSubmit}>
+      <form data-test-id='note-form' onSubmit={handleSubmit}>
         <input
           type='text'
           placeholder='Write your note content'
