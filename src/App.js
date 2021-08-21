@@ -4,6 +4,7 @@ import { createNote, getAllNotes, setToken, update } from './services/notes'
 import { login } from './services/login'
 import LoginForm from './components/LoginForm'
 import CreateNoteForm from './components/CreateNoteForm'
+import Notification from './components/Notification'
 
 export default function App () {
   const [notes, setNotes] = useState([])
@@ -11,6 +12,7 @@ export default function App () {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     getAllNotes().then((notes) => setNotes(notes))
@@ -48,17 +50,16 @@ export default function App () {
       setUsername('')
       setPassword('')
     } catch (error) {
-      console.log(error)
-    }
-
-    if (user) {
-      console.log(user)
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   const handleLogout = () => {
     setUser(null)
-    setToken(user.token)
+    setToken(null)
     window.localStorage.removeItem('loggedNoteAppUser')
   }
 
@@ -75,6 +76,9 @@ export default function App () {
   return (
     <div>
       <h1>Notes</h1>
+
+      <Notification message={errorMessage} />
+
       {
         user
           ? <CreateNoteForm
