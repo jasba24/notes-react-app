@@ -2,7 +2,6 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render } from '@testing-library/react'
 import Toggleable from './Toggleable'
-import i18n from '../i18n'
 
 describe('<Toggleable />', () => {
   let component
@@ -24,7 +23,7 @@ describe('<Toggleable />', () => {
 
     expect(el.parentNode).not.toHaveStyle('display: none')
 
-    const cancelButton = component.getByText(i18n.TOGGABLE.CANCEL_BUTTON)
+    const cancelButton = component.getByText('Cancel')
     fireEvent.click(cancelButton)
 
     expect(el.parentNode).toHaveStyle('display: none')
